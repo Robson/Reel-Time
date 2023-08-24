@@ -1,0 +1,188 @@
+/***** PAGE *****/
+
+html {
+	background: #fff;
+	color: #333;	
+	text-align: center;
+	padding: 75px 0 25px;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: rubik, sans-serif;
+}
+
+p {
+	margin-top: 0;
+	padding: 5px;
+}
+
+/***** HEADING *****/
+
+h1 {
+	padding: 0 5px;
+	margin: 0;
+	font: normal 50px 'roboto slab', georgia, serif;
+	font-weight: 500;
+}
+
+h2 {
+	margin-top: 0;
+	font-size: 24pt;
+}
+
+h3 {
+	font-size: 16pt;
+}
+
+#about {
+	margin: 0 5px 50px;
+}
+
+/***** LINKS *****/
+
+a {
+	color: #E5007E;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #0d6efd;
+}
+
+/***** CONTENT *****/
+
+#content {
+	margin: 20px 5%;
+	width: 90%;
+}
+
+#bar {
+	position: absolute;
+	background: black;
+	width: 10px;
+}
+
+.filmBoxLeft {
+	position: absolute;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.filmBoxRight {
+	position: absolute;
+	text-align: left;
+	vertical-align: middle;
+	padding-left: 10px;
+}
+
+.meta {
+	position: absolute;
+	display: flex;	
+	align-items: center;
+	colorx: white;
+	font-size: 90%;
+}
+
+.filmBoxLeft .meta {
+	justify-content: right;
+}
+
+.filmBoxRight .meta {
+	justify-content: left;
+}
+
+.filmBoxLeft:hover .details,
+.filmBoxRight:hover .details {
+	color: black;
+}
+
+.film {
+	position: absolute;
+	border: 4px solid black;
+	margin: -4px 0 0 -4px;
+	background: black;
+}
+
+.film img {
+	width: 190px;
+	height: 281px;
+	object-fit: cover;
+}
+
+.film:hover {
+	border: 4px solid #0d6efd;
+}
+
+.cross {
+	position: absolute;
+	background: black;
+}
+
+.mobilePoster {
+	max-width: 90%;
+	max-height: 300px;
+	margin-bottom: 10px;	
+}
+
+/***** FOOTER *****/
+
+#footer {
+	margin: 0 auto 15px;
+	max-width: 50%;
+}
+
+#footer p {
+	margin: 0 0 15px;
+}
+
+/***** CONTROLS *****/
+
+select, input {
+	font-family: rubik, sans-serif;
+	max-width: 100%;
+}
+
+/***** TOOLTIP *****/
+  
+#tt {
+	background: rgba(0, 0, 0, 1);
+	text-align: center;
+	color: #fff;
+	height: 200px;
+	width: 200px;
+	top: 0;
+	left: 0;
+	position: absolute;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	font-size: 13px;
+}
+
+#tt * {
+	margin: 0;
+	padding: 0;
+}
+
+#tooltip_title {
+	margin: 15px 5px 5px;
+	padding: 0;
+	line-height: 1.1em;
+	font-size: 16pt;
+}
+
+#tooltip_stats th {
+	text-align: right;
+	padding: 0 1px;
+	font-weight: normal;
+}
+
+#tooltip_stats td {
+	text-align: left;
+	padding: 0 1px;
+}
+
+#tooltip_stats table {
+	margin: 0 auto;
+}

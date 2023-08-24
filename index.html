@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<!--<script async src="https://www.googletagmanager.com/gtag/js?id=G-2E561F2422"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'G-2E561F2422');
+		</script>-->
+		<!--
+		************************************************
+		The script above is for google analytics.
+		You'll want to remove that if you use this page.
+		************************************************
+		-->
+		<title>Reel Time</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="data.js"></script>
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap">
+		<link rel="stylesheet" type="text/css" href="style.css"  />
+	</head>
+	<body>
+
+		<h1>Reel Time</h1>
+		<h2>🎥⏰</h2>
+
+		<div id="about">
+			A list of films by
+			<select id="order" onchange="javascript:createLayout()"><option value="inc" selected>increasing</option><option value="dec">decreasing</option></select>
+			amounts of time, with at least
+			<select id="votes" onchange="javascript:createLayout()"><option value="1000">1,000</option><option value="10000">10,000</option><option value="100000">100,000</option></select>
+			votes on the IMDb.
+		</div>
+
+		<div id="wrapper">
+			<div id="content">
+			</div>
+		</div>
+
+		<div id="footer">
+			<p>Written by <a href="https://robson.plus">Robson</a>.</p>
+			<p>Want to suggest a film or improve this page? <a href="https://github.com/Robson/Reel-Time/">Here's the code</a>.</p>
+		</div>
+
+		<div id="tt" style="display: none">
+			<p id="tooltip_title"></p>
+			<p id="tooltip_stats"></p>
+		</div>
+
+		<script>
+
+			var isTouchDevice = ('ontouchstart' in document.documentElement);
+			var tt = d3.select('#tt');
+			var filtered;
+
+			function improveImageQuality(image, id) {
+				switch (id) {
+					case 'tt4703048':
+						return 'https://m.media-amazon.com/images/M/MV5BZmI0NjgzOTktMmU1OS00MmU2LWJkMzgtMzlkMWY4ZWRmZTY5XkEyXkFqcGdeQXVyNTEzMzUyNDI@._V1_QL90_UY562_CR186,0,379,562_.jpg';
+					case 'tt0116629':
+						return 'https://m.media-amazon.com/images/M/MV5BMDFhMzQxOTUtODU0ZS00ZGVlLThkMmQtNzY2NDQ1MTdhMjg4XkEyXkFqcGdeQXVyMTYzMDM0NTU@._V1_QL90_UY562_CR40,0,379,562_.jpg';
+					case 'tt0101244':
+						return 'https://m.media-amazon.com/images/M/MV5BZjY3OTMzZDEtMjc2Zi00OWRhLTkzOTgtOGY4OTg0ZGYzM2UwXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_QL90_UY562_CR30,0,379,562_.jpg';
+					case 'tt0331338':
+						return 'https://m.media-amazon.com/images/M/MV5BY2YwYjcxYzItYTE2YS00NTE4LTkxMWEtNGFiZGI1N2VjOTk3XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_QL90_UY500_CR5,0,390,661_.jpg';
+					default:
+						if (image.includes('_UX190') && image.includes('190,281')) {
+							image = image
+								.replace('_UX190', '_UX380')
+								.replace('190,281', '380,562');
+						} else if (image.includes('_UY281') && image.includes('190,281')) {
+							image = image
+								.replace('_UY281', '_UY562')
+								.replace('190,281', '379,562');
+						}
+						return image.replace('QL75', 'QL90');
+				}
+			}
+
+			function makeFilteredFilmList() {
+				var optionVotes = d3.select("#votes").node().value;
+				filtered = data.filter(x => x.Votes >= +optionVotes);
+				filtered = filtered.sort((x, y) => x.Seconds == y.Seconds ? x.Votes - y.Votes : x.Seconds - y.Seconds);
+				var optionOrder = d3.select("#order").node().value;
+				if (optionOrder == 'dec') {
+					filtered.reverse();
+				}
+				for (var i = filtered.length - 1; i > 0; i--) {
+					if (filtered[i].Seconds == filtered[i-1].Seconds) {
+						filtered.splice(i-1, 1);
+					}
+				}
+			}
+
+			function createLayout() {
+				var content = d3.select('#content');
+				var box = content.node().getBoundingClientRect();
+				var width = box.width;
+				if (width < 600)
+					createLayoutSmall();
+				else
+					createLayoutLarge();
+			}
+
+			function createLayoutSmall() {
+
+				d3.selectAll('#content *').remove();
+
+				var content = d3.select('#content');
+				content.style('position', 'static');
+				content.style('height', 'auto');
+				d3.select('#wrapper').style('height', 'auto');
+
+				var optionVotes = d3.select("#votes").node().value;
+				filtered = data.filter(x => x.Votes >= +optionVotes);
+				filtered = filtered.sort((x, y) => x.Seconds == y.Seconds ? x.Votes - y.Votes : x.Seconds - y.Seconds);
+				var optionOrder = d3.select("#order").node().value;
+				if (optionOrder == 'dec') {
+					filtered.reverse();
+				}
+
+				for (var i = filtered.length - 1; i > 0; i--) {
+					if (filtered[i].Seconds == filtered[i-1].Seconds) {
+						console.log(filtered[i-1]);
+						filtered.splice(i-1, 1);
+					}
+				}
+
+       			for (var i = 0; i < filtered.length; i++) {
+					var niceImage = improveImageQuality(filtered[i].Poster, filtered[i].Id);
+					var img = d3.select('#content')
+						.append('div')
+						.append('a')
+						.attr('href', 'https://www.imdb.com/title/' + filtered[i].Id)
+						.append('img')
+						.attr('class', 'mobilePoster')
+						.attr('src', niceImage);
+       			}
+			}
+
+			function createLayoutLarge() {
+
+				const metaWidth = 190;
+				const filmWidth = 190;
+				const filmHeight = 281;
+
+				var content = d3.select('#content');
+				content.style('position', 'absolute');
+				var box = content.node().getBoundingClientRect();
+				var width = box.width;
+				var mid = width / 2;
+
+				d3.selectAll('#content *').remove();
+
+				var bar = content
+					.append('div')
+					.attr('id', 'bar')
+					.style('left', ((width - 10) / 2) + 'px')
+					.style('top', (filmHeight / 2) + 'px');
+
+				makeFilteredFilmList();
+
+       			for (var i = 0; i < filtered.length; i++) {
+
+       				var lowest = 0;
+
+       				var top = 0, left = 0, crossLeft = 0;
+       				if (i % 2 == 0) {
+       					top = ((i/2) * (filmHeight + 50));
+       					left = mid - (filmWidth + 50);
+       					crossLeft = left + 50;
+       				} else {
+       					top = ((i/2) * (filmHeight + 50));
+       					left = mid + 50;
+       					crossLeft = mid;
+       				}
+
+       				lowest = top;
+
+					var cross = content
+						.append('div')
+						.attr('id', 'cross' + i)
+						.attr('class', 'cross')
+						.style('width', filmWidth + 'px')
+						.style('height', '10px')
+						.style('top' , (top + (filmHeight / 2)) + 'px')
+						.style('left', crossLeft + 'px');
+
+					if (width > 800) {
+
+						var box = content
+							.append('div')
+							.attr('class', 'filmBox' + (i % 2 == 0 ? 'Left' : 'Right'))
+							.style('width', (metaWidth + filmWidth) + 'px')
+							.style('height', filmHeight + 'px')
+							.style('top', 5 + top + 'px')
+							.style('left', (i % 2 == 0 ? left - metaWidth : left) + 'px');
+
+						var film = box
+							.append('div')
+							.attr('id', 'film' + i)
+							.attr('data-index', i)
+							.attr('class', 'film')
+							.style('width', filmWidth + 'px')
+							.style('height', filmHeight + 'px')
+							.style('top', '0px')
+							.style('left', (i % 2 == 0 ? metaWidth : 0) + 'px');
+
+						var filmData = filtered[i];
+
+						var details = '<a href="https://www.imdb.com/title/' + filtered[i].Id + '"><h3>' + filmData.Name + '</h3></a>' +
+						              'Year: ' + filmData.Year +
+						              '<br/>' +
+						              'IMDb: ' + filmData.Rating.toFixed(1) + '/10 (' + Math.round(filmData.Votes / 1000, 0) + 'k votes)';
+						if (parseInt(filmData.Metascore) > 0)
+							details += '<br/>Metacritic: ' + filmData.Metascore + '%';
+
+						var meta = box
+							.append('div')
+							.attr('class', 'meta')
+							.style('width', metaWidth + 'px')
+							.style('height', filmHeight + 'px')
+							.style('top', '0px')
+							.style('left', (i % 2 == 0 ? -10 : filmWidth + 10) + 'px')
+							.append('div')
+							.attr('class', 'details')
+							.html(details);
+
+					} else {
+
+						var film = content
+							.append('div')
+							.attr('id', 'film' + i)
+							.attr('data-index', i)
+							.attr('class', 'film ttt')
+							.style('width', filmWidth + 'px')
+							.style('height', filmHeight + 'px')
+							.style('top', 5 + top + 'px')
+							.style('left', left + 'px');
+
+					}
+
+					var niceImage = improveImageQuality(filtered[i].Poster, filtered[i].Id);
+					var img = film
+						.append('a')
+						.attr('href', 'https://www.imdb.com/title/' + filtered[i].Id)
+						.append('img')
+						.attr('class', 'poster')
+						.attr('src', niceImage);
+       			}
+
+       			content.style('height', (lowest + (filmHeight) + 50) + 'px');
+       			d3.select('#wrapper').style('height', (lowest + (filmHeight) + 100) + 'px');
+       			bar.style('height', (lowest + 10) + 'px');
+
+       			createTooltipTriggers();
+			}
+
+			window.addEventListener('resize', function(event) {
+			    createLayout();
+			}, true);
+
+			window.onresize = function(event) {
+			    createLayout();
+			};
+
+			window.onload = function() {
+				createLayout();
+			}
+
+			createLayout();
+
+			function setTooltipFilm(filmIndex) {
+				d3.select('#tooltip_thumb').style('display', null);
+				var film = filtered[filmIndex];
+				d3.select('#tooltip_title').html(film.Name);
+				d3.selectAll('#tooltip_stats *').remove();
+				var table = d3.select('#tooltip_stats').append('table');
+				var row = table.append('tr');
+				row.append('th').html('Year:');
+				row.append('td').html(film.Year);
+				row = table.append('tr');
+				row.append('th').html('IMDb:');
+				row.append('td').html(film.Rating.toFixed(1) + '/10');
+				row = table.append('tr');
+				row.append('th').html('IMDb Votes:');
+				row.append('td').html(Math.round(film.Votes / 1000, 0) + 'K');
+				row = table.append('tr');
+				row.append('th').html('Metacritic:');
+				if (parseInt(film.Metascore) > 0)
+					row.append('td').html(film.Metascore + '%');
+				else
+					row.append('td').html(film.Metascore || 'NA');
+			}
+
+			function createTooltipTriggers() {
+				d3.selectAll('.ttt')
+					.on("mouseover", function(d, i) {
+						setTooltipFilm(d3.select(this).attr('data-index'));
+					})
+					.on("mouseout", function() {
+						tt.style('display', 'none');
+					})
+					.on("mousemove", function(d, i) {
+						if (isTouchDevice) {
+							setTooltipFilm(d3.select(this).attr('data-index'));
+						}
+						var x = d3.event.pageX - 100;
+						x = Math.max(x, 10);
+						x = Math.min(x, document.body.clientWidth - 50);
+						var y = d3.event.pageY - 230;
+						tt.style('left', Math.floor(x) + 'px');
+						tt.style('top', Math.floor(y) + 'px');
+						if (x <= 0 || y <= 0) {
+							tt.style('display', 'none');
+						} else {
+							tt.style('display', null);
+						}
+					});
+			}
+
+		</script>
+	</body>
+</html>
