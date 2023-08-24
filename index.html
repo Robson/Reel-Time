@@ -156,14 +156,14 @@
 				content.style('position', 'absolute');
 				var box = content.node().getBoundingClientRect();
 				var width = box.width;
-				var mid = width / 2;
+				var mid = 5 + (width / 2);
 
 				d3.selectAll('#content *').remove();
 
 				var bar = content
 					.append('div')
 					.attr('id', 'bar')
-					.style('left', ((width - 10) / 2) + 'px')
+					.style('left', (mid - 5) + 'px')
 					.style('top', (filmHeight / 2) + 'px');
 
 				makeFilteredFilmList();
