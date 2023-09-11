@@ -100,7 +100,7 @@ a:hover {
 
 .film {
 	position: absolute;
-	border: 4px solid black;
+	border: 4px solid #000001;
 	margin: -4px 0 0 -4px;
 	background: black;
 }
