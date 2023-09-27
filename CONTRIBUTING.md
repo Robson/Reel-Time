@@ -28,7 +28,8 @@ Some film titles are not as good, but still worthy of including:
 Some films titles don't work in our context, even if they initially seem as though they would:
  * 9/11: Minute by Minute (_this has units of time, but no clear amount of time_)
  * Trouble Every Day (_ambiguous_)
- * In Our Day (_has a unit of time, but it's not really referring to that amount of time_)
+ * Seconds (_ambiguous_)
+ * In Our Day (_has a unit of time, but it's not really referring to that amount of time_) 
 
 ## Notes
 Here are the conversions that I use for some ambiguous amounts of time:
