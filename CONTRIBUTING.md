@@ -13,23 +13,24 @@ Film recommendations are very welcome.
 If there are multiple films with the same amount of time, I include the best one using this order of preference:
 
 ### Best
-The best film titles clearly refer to the entire unit of time:
+The best film titles clearly refer to a unit of time, with no ambiguity. Such as:
+ * Around the World in 80 Days
  * Thirteen Minutes
  * Rush Hour
- * Around the World in 80 Days
  * 12 Years a Slave
 
 ### Okay
 Some film titles are not as good, but still worthy of including:
  * Ten Seconds to Hell (_this could be considered as a point in time, rather than an amount of time_)
  * 28 Days Later (_this could be considered as a point in time, rather than an amount of time_)
-
+ 
 ### No
 Some films titles don't work in our context, even if they initially seem as though they would:
  * 9/11: Minute by Minute (_this has units of time, but no clear amount of time_)
  * Trouble Every Day (_ambiguous_)
  * Seconds (_ambiguous_)
  * In Our Day (_has a unit of time, but it's not really referring to that amount of time_) 
+ * A Twelve Year Night (_the mixed units of time is not ideal_)
 
 ## Notes
 Here are the conversions that I use for some ambiguous amounts of time:
