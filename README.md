@@ -1,4 +1,4 @@
-# Reel-Time
+# Reel-Time 🎥⏰
 
 ## Table of Contents
 
