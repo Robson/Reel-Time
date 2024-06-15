@@ -86,9 +86,16 @@
 			}
 
 			function makeFilteredFilmList() {
-				var optionVotes = d3.select("#votes").node().value;
-				filtered = data.filter(x => x.Votes >= +optionVotes);
-				filtered = filtered.sort((x, y) => x.Seconds == y.Seconds ? x.Votes - y.Votes : x.Seconds - y.Seconds);
+				var optionVotes = +d3.select("#votes").node().value;
+
+				filtered = data.slice(0);
+				filtered = filtered.filter(x => x.Votes >= optionVotes);
+				filtered = filtered
+					.map(value => ({ value, sort: Math.random() }))
+					.sort((a, b) => a.sort - b.sort)
+					.map(({ value }) => value)
+				filtered = filtered.sort((x, y) => x.Seconds - y.Seconds);
+
 				var optionOrder = d3.select("#order").node().value;
 				if (optionOrder == 'dec') {
 					filtered.reverse();
@@ -120,8 +127,13 @@
 				d3.select('#wrapper').style('height', 'auto');
 
 				var optionVotes = d3.select("#votes").node().value;
-				filtered = data.filter(x => x.Votes >= +optionVotes);
-				filtered = filtered.sort((x, y) => x.Seconds == y.Seconds ? x.Votes - y.Votes : x.Seconds - y.Seconds);
+				filtered = data.slice(0);
+				filtered = filtered.filter(x => x.Votes >= optionVotes);
+				filtered = filtered
+					.map(value => ({ value, sort: Math.random() }))
+					.sort((a, b) => a.sort - b.sort)
+					.map(({ value }) => value)
+				filtered = filtered.sort((x, y) => x.Seconds - y.Seconds);
 				var optionOrder = d3.select("#order").node().value;
 				if (optionOrder == 'dec') {
 					filtered.reverse();
