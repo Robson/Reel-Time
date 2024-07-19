@@ -34,9 +34,22 @@
 
 		<div id="about">
 			A list of films by
-			<select id="order" onchange="javascript:createLayout()"><option value="inc" selected>increasing</option><option value="dec">decreasing</option></select>
-			amounts of time, with at least
-			<select id="votes" onchange="javascript:createLayout()"><option value="1000" selected>1,000</option><option value="10000">10,000</option><option value="100000">100,000</option></select>
+			<select id="order" onchange="javascript:createLayout()">
+			<option value="inc" selected>increasing</option>
+			<option value="dec">decreasing</option>
+			</select>
+			amounts of time, linked to
+			<select id="links" onchange="javascript:createLayout()">
+			<option value="IMDb" selected>the IMDb</option>
+			<option value="Letterboxd">Letterboxd</option>
+			<option value="Trakt">Trakt</option>
+			</select>,
+			with at least
+			<select id="votes" onchange="javascript:createLayout()">
+			<option value="1000" selected>1,000</option>
+			<option value="10000">10,000</option>
+			<option value="100000">100,000</option>
+			</select>
 			votes on the IMDb.
 		</div>
 
@@ -151,11 +164,24 @@
 					var img = d3.select('#content')
 						.append('div')
 						.append('a')
-						.attr('href', 'https://www.imdb.com/title/' + filtered[i].Id)
+						.attr('href', makeUrl(filtered[i].Id))
 						.append('img')
 						.attr('class', 'mobilePoster')
 						.attr('src', niceImage);
        			}
+			}
+
+			function makeUrl(id) {
+
+				switch (d3.select("#links").node().value.toLowerCase()) {
+					case 'letterboxd':
+						return 'https://letterboxd.com/imdb/' + id + '/';;
+					case 'trakt':
+						return 'https://trakt.tv/search/imdb/' + id + '/';;
+					default:
+						return 'https://www.imdb.com/title/' + id + '/';
+				}
+
 			}
 
 			function createLayoutLarge() {
@@ -228,7 +254,7 @@
 
 						var filmData = filtered[i];
 
-						var details = '<a href="https://www.imdb.com/title/' + filtered[i].Id + '"><h3>' + filmData.Name + '</h3></a>' +
+						var details = '<a href="' + makeUrl(filtered[i].Id) + '"><h3>' + filmData.Name + '</h3></a>' +
 						              'Year: ' + filmData.Year +
 						              '<br/>' +
 						              'IMDb: ' + filmData.Rating.toFixed(1) + '/10 (' + Math.round(filmData.Votes / 1000, 0) + 'k votes)';
@@ -263,7 +289,7 @@
 					var niceImage = improveImageQuality(filtered[i].Poster, filtered[i].Id);
 					var img = film
 						.append('a')
-						.attr('href', 'https://www.imdb.com/title/' + filtered[i].Id)
+						.attr('href', makeUrl(filtered[i].Id))
 						.append('img')
 						.attr('class', 'poster')
 						.attr('src', niceImage);
