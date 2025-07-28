@@ -64,6 +64,7 @@ namespace GetImdbFilmData
                 ( "90 Minutes in Heaven", "tt4337690", MINUTE * 90, false ),
                 ( "96 Minutes", "tt1641385", MINUTE * 96, false ),
                 ( "97 Minutes", "tt16496386", MINUTE * 97, false ),
+                ( "102 Minutes That Changed America", "tt1312203", MINUTE * 102, false ),
                 ( "105 Minutes", "tt15290106", MINUTE * 105, false ),
                 ( "2 Hours Love", "tt10452466", HOUR * 2, false ),
                 ( "Four Hours at the Capitol", "tt15520020", HOUR * 4, false ),
