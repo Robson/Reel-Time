@@ -6,8 +6,10 @@ Film recommendations are very welcome.
  * The film title must contain an amount of time.
  * The film must be released.
  * The film must have at least 1,000 votes on the IMDb.
- * The film title must be displayed in English on the IMDb film poster.
+ * The film title must be displayed on the IMDb film poster.
  * The film poster+title must be suitable for viewing in a work environment.
+ 
+English-language titles are preferred, but not required.
 
 ## Order of Preference
 If there are multiple films with the same amount of time, I include the best one using this order of preference:
